@@ -2,6 +2,11 @@ using UnityEngine;
 
 public static class Utils 
 {
+    public static float MAX_CAMERA_X = 57f;
+    public static float MIN_CAMERA_X = 3f;
+    public static float MAX_CAMERA_Z = 50f;
+    public static float MIN_CAMERA_Z = 3f;
+
     public static LayerMask GetTargetLayer(EntityAttackType type)
     {
         var layer = type switch

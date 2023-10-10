@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class Unit : Entity
 {
-    [Space(10)][Header("Unit")]
+    [Space(10)]
+    [Header("Unit")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform model;
@@ -17,6 +18,8 @@ public class Unit : Entity
     {
         base.Init(stats);
         agent.speed = speed;
+        agent.updateRotation = false;
+        curTime = attackDelay;
 
         StartCoroutine(UnitAI());
     }
@@ -24,11 +27,25 @@ public class Unit : Entity
     protected virtual void Update()
     {
         curTime += Time.deltaTime;
-        if(curTime >= attackDelay && isTarget && isCanAttack)
+        if (curTime >= attackDelay && isTarget && isCanAttack)
         {
             curTime = 0;
             UnitAttack();
         }
+
+        if (!agent.isStopped)
+        {
+            var foward = new Vector2(transform.position.z, transform.position.x);
+            var target = new Vector2(agent.steeringTarget.z, agent.steeringTarget.x);
+
+            var dir = target - foward;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            transform.eulerAngles = Vector3.up * angle;
+        }
+        uiArea.localEulerAngles = new Vector3(0, -transform.eulerAngles.y, 0);
+
+        animator.SetBool("Walk", !agent.isStopped);
     }
 
     protected virtual IEnumerator UnitAI()
@@ -37,7 +54,7 @@ public class Unit : Entity
         {
             if (isTarget)
             {
-                var check = Physics.OverlapSphere(GetCenterPos(), attackDamage, targetLayer);
+                var check = Physics.OverlapSphere(GetCenterPos(), attackRange, targetLayer);
                 if (check.Length != 0)
                 {
                     isCanAttack = true;
@@ -63,17 +80,29 @@ public class Unit : Entity
                 agent.SetDestination(new Vector3(45, 0, 15));
             }
 
-            yield return new WaitForSeconds(0.05f);
+            yield return null;
         }
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        animator.SetTrigger("Die");
+
+        var time = animator.GetCurrentAnimatorStateInfo(0).length;
+        Destroy(gameObject, time);
+        enabled = false;
     }
 
     protected virtual void UnitAttack()
     {
-        animator.SetTrigger("Attack");        
+        LookTarget(transform, target.GetCenterPos());
+        animator.SetTrigger("Attack");
     }
 
     public virtual void GiveDamage()
     {
+        if (target == null) return;
         target.ApplyDamage(attackDamage);
     }
 }

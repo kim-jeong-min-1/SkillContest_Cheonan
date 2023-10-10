@@ -20,7 +20,7 @@ public class Entity : MonoBehaviour, IDamageable
     protected Entity target;
     public bool isDie { get; private set; }
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         Init(entityStats);
     }
@@ -44,7 +44,6 @@ public class Entity : MonoBehaviour, IDamageable
         while (!isDie)
         {
             var check = Physics.OverlapSphere(GetCenterPos(), viewRange, targetLayer);
-
             if (check.Length != 0)
             {
                 var target = GetNearTarget(check);
@@ -59,13 +58,21 @@ public class Entity : MonoBehaviour, IDamageable
             {
                 isTarget = false;
             }
-            yield return new WaitForSeconds(0.05f);
+
+            if (target && target.isDie)
+            {
+                target = null;
+                isTarget = false;
+            }
+
+            yield return null;
         }
     }
 
     protected virtual void Die()
     {
-
+        // 더 이상 타겟이 되지 않게
+        transform.GetComponent<Collider>().enabled = false;
     }
 
     public Vector3 GetCenterPos() => center.position;
@@ -101,14 +108,22 @@ public class Entity : MonoBehaviour, IDamageable
         }
     }
 
+    protected void LookTarget(Transform tr, Vector3 target)
+    {
+        var dir = (target - tr.position).normalized;
+        var rot = Quaternion.LookRotation(dir, Vector3.up);
+
+        tr.rotation = rot;
+    }
+
     protected virtual void OnDrawGizmos()
     {
         if (entityStats.attackType == EntityAttackType.NonAttack) return;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(center.position, attackRange);
+        Gizmos.DrawWireSphere(center.position, entityStats.attackRange);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(center.position, viewRange);
+        Gizmos.DrawWireSphere(center.position, entityStats.viewRange);
     }
 }
 
