@@ -8,16 +8,16 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - NonAttack
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerUnit_Ground
+  - PlayerUnit_Fly
+  - PlayerTower
+  - HeadQuarter
+  - EnemyUnit_Ground
+  - EnemyUnit_Fly
+  - PlayerInvincible
   - 
   - 
   - 
