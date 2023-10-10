@@ -7296,10 +7296,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 963194227}
-  moveSpeed: 8
-  zoomSpeed: 0.01
-  min_ZoomValue: 65
-  max_ZoomValue: 40
+  moveSpeed: 5
+  zoomSpeed: 8
+  min_ZoomValue: 25
+  max_ZoomValue: 80
 --- !u!1 &559233561
 GameObject:
   m_ObjectHideFlags: 0
