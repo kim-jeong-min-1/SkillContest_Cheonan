@@ -9,6 +9,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Text buildText;
     [SerializeField] private Text peopleText;
     [SerializeField] private Text scoreText;
+    [SerializeField] private List<Text> speedText;
+    [SerializeField] private RedNotifi redNotifi;
+    [SerializeField] private UpgradeInfoUI entityUp;
     [Space(10)]
     [SerializeField] private int maxBuild;
     [SerializeField] private int maxPeople;
@@ -16,6 +19,7 @@ public class GameManager : Singleton<GameManager>
     private int gold;
     private int build;
     private int people;
+    private int preSpeedIndex = 0;
 
     private void Start()
     {
@@ -23,7 +27,22 @@ public class GameManager : Singleton<GameManager>
         Gold = 0;
         People = 0;
         Build = 0;
+        SpeedUP(0);
+        entityUp.action += BuildAndPeopleUpgrade;
+        StartCoroutine(GetGoldRoutine());
     }
+
+    private IEnumerator GetGoldRoutine()
+    {
+        while (!isGameOver && !isGameClear)
+        {
+            Gold += 2;
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    public bool isGameOver { get; set; } = false;
+    public bool isGameClear { get; set; } = false;
 
     public int Score
     {
@@ -33,11 +52,11 @@ public class GameManager : Singleton<GameManager>
         }
         set
         {
-            score += value;
+            score = value;
             scoreText.text = $"{score}";
         }
     }
-    
+
     public int Gold
     {
         get
@@ -46,7 +65,7 @@ public class GameManager : Singleton<GameManager>
         }
         set
         {
-            gold += value;
+            gold = value;
             goldText.text = $"{gold}";
         }
     }
@@ -59,12 +78,12 @@ public class GameManager : Singleton<GameManager>
         }
         set
         {
-            if(value > maxPeople)
+            if (value > maxPeople)
             {
                 return;
             }
 
-            people += value;
+            people = value;
             peopleText.text = $"{people} / {maxPeople}";
         }
     }
@@ -82,7 +101,7 @@ public class GameManager : Singleton<GameManager>
                 return;
             }
 
-            build += value;
+            build = value;
             buildText.text = $"{build} / {maxBuild}";
         }
     }
@@ -105,6 +124,32 @@ public class GameManager : Singleton<GameManager>
         else return true;
     }
 
+    public void Red_Notifi(string text)
+    {
+        redNotifi.OnNotifi(text);
+    }
+
+    public void SpeedUP(int index)
+    {
+        speedText[preSpeedIndex].color = Color.white;
+
+        speedText[index].color = Color.blue;
+        preSpeedIndex = index;
+
+        Time.timeScale = index + 1;
+    }
+
+    public void BuildAndPeopleUpgrade()
+    {
+        entityUp.Buy();
+
+        maxBuild += 3;
+        maxPeople += 5;
+
+        People = people;
+        Build = build;
+    }
+
     public void SpawnUnit(UnitInfo info)
     {
         var pos = Player.Inst.finalHeadQuarters.GetRandSpawnPoint();
@@ -123,7 +168,7 @@ public class GameManager : Singleton<GameManager>
                 RaycastHit hit;
                 var Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if(Physics.Raycast(Ray, out hit, Mathf.Infinity, LayerMask.GetMask("Tile")))
+                if (Physics.Raycast(Ray, out hit, Mathf.Infinity, LayerMask.GetMask("Tile")))
                 {
                     var posX = Mathf.RoundToInt(hit.point.x) + ((info.isEven) ? 0.5f : 0f);
                     var posZ = Mathf.RoundToInt(hit.point.z) + ((info.isEven) ? 0.5f : 0f);
@@ -141,10 +186,13 @@ public class GameManager : Singleton<GameManager>
 
             if (towerObj.BuildCheck())
             {
+                GameManager.Inst.Build++;
+                GameManager.Inst.Gold -= info.price;
                 towerObj.TowerInit();
             }
             else
             {
+                Red_Notifi(Utils.CantBuildHere);
                 Destroy(towerObj.gameObject);
             }
         }

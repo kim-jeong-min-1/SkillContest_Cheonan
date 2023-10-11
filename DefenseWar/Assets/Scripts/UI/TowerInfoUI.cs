@@ -23,12 +23,16 @@ public class TowerInfoUI : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!GameManager.Inst.EnoughBuildCheck() || !GameManager.Inst.EnoughGoldCheck(price))
+        if (!GameManager.Inst.EnoughBuildCheck())
         {
-            //¾Ë¶÷
+            GameManager.Inst.Red_Notifi(Utils.NotEnoughBuild);
             return;
         }
-
+        else if (!GameManager.Inst.EnoughGoldCheck(price))
+        {
+            GameManager.Inst.Red_Notifi(Utils.NotEnoughGold);
+            return;
+        }
         GameManager.Inst.BuildTower(towerInfo);
     }
 

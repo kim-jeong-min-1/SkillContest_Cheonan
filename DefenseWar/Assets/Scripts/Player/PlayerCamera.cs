@@ -35,8 +35,8 @@ public class PlayerCamera : MonoBehaviour
         if (mousePos.x <= 0 || mousePos.x >= Screen.width ||
             mousePos.y <= 0 || mousePos.y >= Screen.height)
         {
-            var centerPos = new Vector3(Screen.width * 0.5f, 0, Screen.height * 0.5f);
-            var dir = (mousePos - centerPos).normalized;
+            var centerPos = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            var dir = ((Vector2)mousePos - centerPos).normalized;
 
             CameraMovement(new Vector3(dir.x, 0, dir.y));
             return;

@@ -75,7 +75,7 @@ namespace JM.Tweening
             {
                 float curTime = 0;
                 float percent = 0;
-                Vector3 start = tr.position;
+                Vector3 start = tr.anchoredPosition;
 
                 AnimationCurve tweenEase = null;
                 if(ease != Ease.None)

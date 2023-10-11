@@ -25,6 +25,8 @@ public class Tower : Entity
 
     public virtual void TowerInit()
     {
+        transform.GetComponent<Collider>().enabled = true;
+
         checks.ForEach(c => tiles.Add(c.curTile));
         checks.ForEach(c => Destroy(c.gameObject));
         tiles.ForEach(t => t.tileType = TileType.Fill);

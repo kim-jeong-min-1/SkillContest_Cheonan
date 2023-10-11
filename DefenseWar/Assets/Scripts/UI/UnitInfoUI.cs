@@ -23,12 +23,19 @@ public class UnitInfoUI : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!GameManager.Inst.EnoughPeopleCheck() || !GameManager.Inst.EnoughGoldCheck(price))
+        if (!GameManager.Inst.EnoughPeopleCheck())
         {
-            //¾Ë¶÷
+            GameManager.Inst.Red_Notifi(Utils.NotEnoughPeople);
+            return;
+        }
+        else if (!GameManager.Inst.EnoughGoldCheck(price))
+        {
+            GameManager.Inst.Red_Notifi(Utils.NotEnoughGold);
             return;
         }
 
+        GameManager.Inst.People++;
+        GameManager.Inst.Gold -= price;
         GameManager.Inst.SpawnUnit(unitInfo);
     }
 

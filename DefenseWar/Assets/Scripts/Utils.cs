@@ -26,5 +26,7 @@ public static class Utils
     public static string NotEnoughGold = "골드가 부족합니다!";
     public static string NotEnoughPeople = "인구 수가 꽉 찼습니다!";
     public static string NotEnoughBuild = "건물 수가 꽉 찼습니다!";
-    public static string NotBuildHere = "이곳에는 설치할 수 없습니다!";
+    public static string CantBuildHere = "이곳에는 설치할 수 없습니다!";
+    public static string BuyCountMax = "더 이상 구매할 수 없습니다.";
+    public static string ItmeMax = "아이템 창이 꽉 찼습니다!";
 }

@@ -15,4 +15,4 @@ MonoBehaviour:
   unitObj: {fileID: 290064279812206609, guid: fb857f1b745269043b7e6acc2ffaed4b, type: 3}
   unitImage: {fileID: 21300000, guid: 3333fda749f9b5946838a2624eaa24c6, type: 3}
   unitName: "\uB3CC\uACA9\uBCD1"
-  price: 0
+  price: 10
