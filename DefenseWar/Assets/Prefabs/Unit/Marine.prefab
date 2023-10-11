@@ -15810,6 +15810,7 @@ MonoBehaviour:
     attackType: 2
   entityHpBar: {fileID: 290064278215224715}
   center: {fileID: 290064279111103259}
+  isPlayable: 1
   agent: {fileID: 290064279812206613}
   animator: {fileID: 290064279812206610}
   model: {fileID: 290064278825241380}

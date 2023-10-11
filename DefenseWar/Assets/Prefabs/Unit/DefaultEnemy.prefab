@@ -149,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityStats:
     hp: 100
-    speed: 1
+    speed: 0.8
     attackDamage: 40
     attackDelay: 0.8
     attackRange: 1
@@ -157,10 +157,13 @@ MonoBehaviour:
     attackType: 3
   entityHpBar: {fileID: 2774099214627453069}
   center: {fileID: 7118555161542713902}
+  isPlayable: 0
   agent: {fileID: 7118555162142790739}
   animator: {fileID: 7118555162674315148}
   model: {fileID: 7295982343656926095}
   uiArea: {fileID: 7118555161026029871}
+  score: 20
+  gold: 2
 --- !u!1001 &7118555162132479986
 PrefabInstance:
   m_ObjectHideFlags: 0

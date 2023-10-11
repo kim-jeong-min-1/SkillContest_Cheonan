@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour, IDamageable
 {
-    [SerializeField] private EntityStat entityStats;
+    [SerializeField] protected EntityStat entityStats;
     [SerializeField] private GaugeBar entityHpBar;
     [SerializeField] private Transform center;
     private float maxHp;
@@ -19,6 +19,7 @@ public class Entity : MonoBehaviour, IDamageable
     protected LayerMask targetLayer;
     protected Entity target;
     public bool isDie { get; private set; }
+    public bool isPlayable = false;
 
     protected virtual void Start()
     {
@@ -35,8 +36,12 @@ public class Entity : MonoBehaviour, IDamageable
 
         hp = maxHp;
         entityHpBar.Init(maxHp);
-        targetLayer = Utils.GetTargetLayer(stats.attackType);
-        StartCoroutine(EntityUpdateTarget());
+
+        if (stats.attackType != EntityAttackType.NonAttack)
+        {
+            targetLayer = Utils.GetTargetLayer(stats.attackType);
+            StartCoroutine(EntityUpdateTarget());
+        }  
     }
 
     protected virtual IEnumerator EntityUpdateTarget()
@@ -67,6 +72,7 @@ public class Entity : MonoBehaviour, IDamageable
 
             yield return null;
         }
+        isTarget = false;
     }
 
     protected virtual void Die()

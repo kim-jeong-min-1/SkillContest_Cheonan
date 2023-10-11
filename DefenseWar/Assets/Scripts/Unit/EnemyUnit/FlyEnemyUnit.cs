@@ -21,7 +21,7 @@ public class FlyEnemyUnit : EnemyUnit
         bullet.transform.position = firePos.position;
         LookTarget(bullet.transform, target.GetCenterPos());
 
-        yield return bullet.transform.DoMove(target.GetCenterPos(), moveTime);
+        yield return bullet.transform.DoMove(target.GetCenterPos(), moveTime, Ease.OutQuad);
 
         bullet.SetActive(false);
         base.GiveDamage();

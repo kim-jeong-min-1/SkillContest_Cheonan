@@ -150,21 +150,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityStats:
     hp: 200
-    speed: 1.1
-    attackDamage: 10
-    attackDelay: 2
+    speed: 0.8
+    attackDamage: 100
+    attackDelay: 4
     attackRange: 3.5
     viewRange: 5
     attackType: 5
   entityHpBar: {fileID: 9170290794617327592}
   center: {fileID: 4320867777417782401}
+  isPlayable: 0
   agent: {fileID: 4320867777600047583}
   animator: {fileID: 4320867778030157399}
   model: {fileID: 4358489538446121401}
   uiArea: {fileID: 4320867777155300684}
+  score: 50
+  gold: 8
   bullet: {fileID: 4320867778335610497}
   firePos: {fileID: 4320867777698509002}
-  moveTime: 0.5
+  moveTime: 1
 --- !u!1 &4320867777698509003
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,6 +210,7 @@ GameObject:
   - component: {fileID: 4320867778335610496}
   - component: {fileID: 4320867778335610501}
   - component: {fileID: 4320867778335610502}
+  - component: {fileID: 891461797}
   m_Layer: 11
   m_Name: bullet
   m_TagString: Untagged
@@ -222,7 +226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4320867778335610497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.991, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.19374476, y: 0.19374476, z: 0.19374476}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -279,6 +283,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &891461797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320867778335610497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4715d011bef5c1b4fab4104e9d49fee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4320867776957880405
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -575,6 +591,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1615157742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3978832998411141891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18b22d8603cf87745ba4a3483584c184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 4320867777600047582}
 --- !u!4 &4358489538446121401 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 951e96f28dbda6f4291ea68a5336d268, type: 3}

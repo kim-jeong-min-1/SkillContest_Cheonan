@@ -42,8 +42,8 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
-        var moveInput = new Vector3(Input.GetAxis("Horizontal"), 0,
-                                    Input.GetAxis("Vertical"));
+        var moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0,
+                                    Input.GetAxisRaw("Vertical"));
         if (moveInput != Vector3.zero) CameraMovement(moveInput);
     }
 

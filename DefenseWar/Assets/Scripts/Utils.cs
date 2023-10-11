@@ -3,9 +3,9 @@ using UnityEngine;
 public static class Utils 
 {
     public static float MAX_CAMERA_X = 57f;
-    public static float MIN_CAMERA_X = 3f;
-    public static float MAX_CAMERA_Z = 50f;
-    public static float MIN_CAMERA_Z = 3f;
+    public static float MIN_CAMERA_X = 30f;
+    public static float MAX_CAMERA_Z = 20f;
+    public static float MIN_CAMERA_Z = -0.3f;
 
     public static LayerMask GetTargetLayer(EntityAttackType type)
     {
@@ -22,4 +22,9 @@ public static class Utils
 
         return layer;
     }
+
+    public static string NotEnoughGold = "골드가 부족합니다!";
+    public static string NotEnoughPeople = "인구 수가 꽉 찼습니다!";
+    public static string NotEnoughBuild = "건물 수가 꽉 찼습니다!";
+    public static string NotBuildHere = "이곳에는 설치할 수 없습니다!";
 }

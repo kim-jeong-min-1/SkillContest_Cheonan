@@ -13,6 +13,7 @@ public class Unit : Entity
     [SerializeField] private Transform uiArea;
     protected bool isAttackDelay;
     protected float curTime;
+    protected Vector3 curMovePos;
 
     public override void Init(EntityStat stats)
     {
@@ -77,7 +78,21 @@ public class Unit : Entity
             else
             {
                 agent.isStopped = false;
-                agent.SetDestination(new Vector3(45, 0, 15));
+
+                if (Vector3.Distance(transform.position , curMovePos) <= 2f 
+                    || curMovePos == Vector3.zero)
+                {
+                    agent.ResetPath();
+                    var newPos = Player.Inst.GetHeadQuarterPos();
+                    curMovePos = newPos;
+
+                    agent.SetDestination(curMovePos);
+                }
+                else
+                {
+                    agent.SetDestination(curMovePos);
+                }
+
             }
 
             yield return null;
