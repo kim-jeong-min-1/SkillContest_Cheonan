@@ -19,7 +19,7 @@ public class HeadQuarter : Entity
         if(isFinal)
         {
             // 게임 오버 처리
-            print("GameOver");
+            GameManager.Inst.isGameOver = true;
         }
         else
         {

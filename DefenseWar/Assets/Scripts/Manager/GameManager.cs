@@ -42,7 +42,7 @@ public class GameManager : Singleton<GameManager>
     {
         while (!isGameOver && !isGameClear)
         {
-            Gold += 2;
+            Gold += 1;
             yield return new WaitForSeconds(1f);
         }
     }

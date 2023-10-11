@@ -27,7 +27,7 @@ public class Player : Singleton<Player>
                 pos = finalHeadQuarters.transform.position + Random.insideUnitSphere * nearPointRadius;
             }
 
-            if(NavMesh.SamplePosition(pos, out hit, 1.0f, NavMesh.AllAreas))
+            if(NavMesh.SamplePosition(pos, out hit, 10f, NavMesh.AllAreas))
             {
                 return hit.position;
             }

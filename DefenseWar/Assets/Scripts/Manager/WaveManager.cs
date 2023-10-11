@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class WaveManager : Singleton<WaveManager>
 {
     [SerializeField] private List<EnemyUnit> enemies;
+    [SerializeField] private EnemyUnit curStageBoss;
     [SerializeField] private WaveNotifi waveNotifi;
     [SerializeField] private GaugeBar waveProcess;
     [SerializeField] private RectTransform waveWait;
