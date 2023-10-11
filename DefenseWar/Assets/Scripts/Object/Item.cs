@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    public ItemType type;
+    public string itemName;
+    public float duration;
+    [SerializeField] private GameObject explainPopup;
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        
+        ItemManager.Inst.UseItem(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        explainPopup.SetActive(true);
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        explainPopup.SetActive(false);
     }
 }

@@ -7,10 +7,10 @@ public class Unit : Entity
 {
     [Space(10)]
     [Header("Unit")]
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Animator animator;
-    [SerializeField] private Transform model;
-    [SerializeField] private Transform uiArea;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected Animator animator;
+    [SerializeField] protected Transform model;
+    [SerializeField] protected Transform uiArea;
     protected bool isAttackDelay;
     protected float curTime;
     protected Vector3 curMovePos;

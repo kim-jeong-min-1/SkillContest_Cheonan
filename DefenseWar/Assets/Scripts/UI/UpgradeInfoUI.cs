@@ -47,8 +47,8 @@ public class UpgradeInfoUI : MonoBehaviour
 
     public void Buy()
     {
-        price += priceUpValue;
-        curUpgrade++;
         GameManager.Inst.Gold -= price;
+        curUpgrade++;
+        price += priceUpValue;
     }
 }

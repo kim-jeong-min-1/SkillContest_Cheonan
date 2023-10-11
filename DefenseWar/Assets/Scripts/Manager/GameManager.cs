@@ -12,14 +12,20 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<Text> speedText;
     [SerializeField] private RedNotifi redNotifi;
     [SerializeField] private UpgradeInfoUI entityUp;
+    [SerializeField] private Unit invincibleUnit;
     [Space(10)]
     [SerializeField] private int maxBuild;
     [SerializeField] private int maxPeople;
+
+    [System.NonSerialized] public List<EnemyUnit> curEnemyUnits = new();
+    [System.NonSerialized] public List<Tower> curTowers = new();
+
     private int score;
     private int gold;
     private int build;
     private int people;
     private int preSpeedIndex = 0;
+    private bool isGoldUp = false;
 
     private void Start()
     {
@@ -65,7 +71,15 @@ public class GameManager : Singleton<GameManager>
         }
         set
         {
-            gold = value;
+            if(value > gold)
+            {
+                gold = (isGoldUp) ? gold + ((value - gold) * 2) : value;
+            }
+            else
+            {
+                gold = value;
+            }
+            
             goldText.text = $"{gold}";
         }
     }
@@ -106,6 +120,15 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void WaveEnd()
+    {
+        foreach (var enemy in curEnemyUnits)
+        {
+            if (enemy != null) enemy.WaveEndDie();
+        }
+        curEnemyUnits.Clear();
+    }
+
     public bool EnoughGoldCheck(int gold)
     {
         if (gold > this.gold) return false;
@@ -139,6 +162,17 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = index + 1;
     }
 
+    public void GoldUP()
+    {
+        StartCoroutine(goldUp());
+        IEnumerator goldUp()
+        {
+            isGoldUp = true;
+            yield return new WaitForSeconds(60f);
+            isGoldUp = false;
+        }
+    }
+
     public void BuildAndPeopleUpgrade()
     {
         entityUp.Buy();
@@ -150,10 +184,55 @@ public class GameManager : Singleton<GameManager>
         Build = build;
     }
 
+    public void EnemyAttackEnable(List<EnemyUnit> enemys)
+    {
+        StartCoroutine(enemyAttackEnable());
+        IEnumerator enemyAttackEnable()
+        {
+            enemys.ForEach(e => e.isCantAttack = true);
+            yield return new WaitForSeconds(10f);
+            enemys.ForEach(e => e.isCantAttack = false);
+        }
+    }
+
+    public void EnemySpeedDown(List<EnemyUnit> enemys)
+    {
+        StartCoroutine(enemySpeedDown());
+        IEnumerator enemySpeedDown()
+        {
+            enemys.ForEach(e => e.EnemySpeedDown());
+            yield return new WaitForSeconds(10f);
+            enemys.ForEach(e => e.EnemySpeedUp());
+        }
+    }
+
+    public void TowerAttackSpeedUp(List<Tower> towers)
+    {
+        towers.ForEach(t => t.TowerAttackSpeedUP());
+    }
+
+    public void TowerHeal(List<Tower> towers)
+    {
+        towers.ForEach(t => t.TowerHeal());
+    }
+
     public void SpawnUnit(UnitInfo info)
     {
         var pos = Player.Inst.finalHeadQuarters.GetRandSpawnPoint();
         Instantiate(info.unitObj, pos, Quaternion.identity);
+    }
+
+    public void SpawnInvincibleUnit()
+    {
+        var pos = Player.Inst.finalHeadQuarters.GetRandSpawnPoint();
+        var unit = Instantiate(invincibleUnit, pos, Quaternion.identity);
+
+        StartCoroutine(timeOver());
+        IEnumerator timeOver()
+        {
+            yield return new WaitForSeconds(60f);
+            Destroy(unit.gameObject);
+        }
     }
 
     public void BuildTower(TowerInfo info)
@@ -188,6 +267,7 @@ public class GameManager : Singleton<GameManager>
             {
                 GameManager.Inst.Build++;
                 GameManager.Inst.Gold -= info.price;
+                curTowers.Add(towerObj);
                 towerObj.TowerInit();
             }
             else

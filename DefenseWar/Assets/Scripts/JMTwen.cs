@@ -113,6 +113,8 @@ public enum Ease
     Linear,
     OutQuad,
     InQuad,
+    OutElastic,
+    InElastic,
     None
 }
 

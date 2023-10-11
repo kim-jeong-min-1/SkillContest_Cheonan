@@ -5,9 +5,9 @@ using UnityEngine;
 public class Entity : MonoBehaviour, IDamageable
 {
     [SerializeField] protected EntityStat entityStats;
-    [SerializeField] private GaugeBar entityHpBar;
+    [SerializeField] protected GaugeBar entityHpBar;
     [SerializeField] private Transform center;
-    private float maxHp;
+    protected float maxHp;
     protected float hp;
     protected float speed;
     protected float attackDamage;

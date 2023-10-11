@@ -106,6 +106,26 @@ public class Tower : Entity
     {
         base.Die();
         isBuild = false;
+        GameManager.Inst.curTowers.Remove(this);
         StartCoroutine(Break());
+    }
+
+    public void TowerHeal()
+    {
+        var heal = maxHp * 0.3f;
+        hp += heal;
+        hp = Mathf.Clamp(hp, 0, maxHp);
+        entityHpBar.SetGaugeBar(hp);
+    }
+
+    public void TowerAttackSpeedUP()
+    {
+        StartCoroutine(attackSpeedUp());
+        IEnumerator attackSpeedUp()
+        {
+            attackDelay /= 2;
+            yield return new WaitForSeconds(10f);
+            attackDelay *= 2;
+        }
     }
 }
