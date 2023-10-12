@@ -2,20 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : Singleton<PlayerCamera>
 {
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float lookZvalue;
 
     [Space(15)]
     [Header("Zoom")]
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float min_ZoomValue;
     [SerializeField] private float max_ZoomValue;
+    private int headQuaterPoint = 0;
+    private Vector3 savePoint;
+
     private void Update()
     {
         CameraZoom();
         MoveInputCheck();
+        CameraPointMove();
     }
 
     private void CameraZoom()
@@ -45,6 +50,59 @@ public class PlayerCamera : MonoBehaviour
         var moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0,
                                     Input.GetAxisRaw("Vertical"));
         if (moveInput != Vector3.zero) CameraMovement(moveInput);
+    }
+
+    private void CameraPointMove()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            PointMove(Player.Inst.finalHeadQuarters.GetCenterPos());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (headQuaterPoint >= Player.Inst.headQuarters.Count) headQuaterPoint = 0;
+
+            if(Player.Inst.headQuarters.Count == 0)
+            {
+                PointMove(Player.Inst.finalHeadQuarters.GetCenterPos());
+            }
+            else
+            {
+                PointMove(Player.Inst.headQuarters[headQuaterPoint].GetCenterPos());
+                headQuaterPoint++;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            PointMove(Player.Inst.GetUnitPos());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (savePoint == Vector3.zero)
+            {
+                PointMove(Player.Inst.finalHeadQuarters.GetCenterPos());
+            }
+            else
+            {
+                PointMove(savePoint, false);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            savePoint = transform.position;
+        }
+    }
+
+    public void PointMove(Vector3 pos, bool isLook = true)
+    {
+        if (isLook) pos.z -= lookZvalue;
+
+        pos.y = transform.position.y;
+        transform.position = pos;
     }
 
     private void CameraMovement(Vector3 dir)

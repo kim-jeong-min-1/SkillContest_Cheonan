@@ -7,6 +7,7 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
 {
     [SerializeField] private GameObject circle;
     [SerializeField] private float loadTime;
+    private string curSceneName;
 
     protected override void Awake()
     {
@@ -14,14 +15,26 @@ public class SceneLoadManager : Singleton<SceneLoadManager>
         DontDestroyOnLoad(gameObject);
     }
 
-    public void LoadScene(string name)
+    public void LoadScene(string name, System.Action action = null)
     {
         StartCoroutine(LoadScene());
         IEnumerator LoadScene()
         {
             yield return StartCoroutine(FadeIn());
+
+            curSceneName = name;
             SceneManager.LoadScene(name);
             yield return StartCoroutine(FadeOut());
+
+            action?.Invoke();
+        }
+    }
+
+    public void RankInput()
+    {
+        if (curSceneName == "Rank")
+        {
+            RankManager.Inst.NewRank();
         }
     }
 

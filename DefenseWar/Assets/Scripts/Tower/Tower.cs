@@ -75,6 +75,8 @@ public class Tower : Entity
             renders.ForEach(r => r.material.SetFloat("_Amount", percent));
             yield return null;
         }
+
+        GameManager.Inst.Build--;
         Destroy(gameObject);
         tiles.ForEach(t => t.tileType = TileType.Empty);
     }

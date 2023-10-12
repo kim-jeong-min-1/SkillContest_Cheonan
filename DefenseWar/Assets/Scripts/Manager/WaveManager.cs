@@ -54,12 +54,20 @@ public class WaveManager : Singleton<WaveManager>
             waveText.text = $"Wave : {curWave} / {maxWave}";
 
             if (curWave % 4 == 0) maxIndex++;
+
+            if (curWave == maxWave)
+            {
+                var rand = Random.Range(0, spawnPoints.Count);
+                waveText.text = $"Wave : 보스 스테이지";
+                Instantiate(curStageBoss, spawnPoints[rand].position, Quaternion.identity);
+            }
+
             yield return StartCoroutine(WaveUpdate(maxIndex));
 
             GameManager.Inst.WaveEnd();
             minSpawnTime -= spawnTimeValue;
             maxSpawnTime -= spawnTimeValue;
-        }  
+        }
     }
 
     private IEnumerator WaveWaiting()
@@ -71,12 +79,12 @@ public class WaveManager : Singleton<WaveManager>
             curTime += Time.deltaTime;
             waitText.text = $"{(int)curTime / 60} : {(int)curTime % 60} / 2 : 00";
 
-            if(curTime >= waitTime)
+            if (curTime >= waitTime)
             {
                 isWaiting = false;
                 break;
             }
-            yield return null; 
+            yield return null;
         }
     }
 

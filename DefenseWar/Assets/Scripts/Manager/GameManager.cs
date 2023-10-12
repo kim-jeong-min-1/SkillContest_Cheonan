@@ -12,10 +12,12 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<Text> speedText;
     [SerializeField] private RedNotifi redNotifi;
     [SerializeField] private UpgradeInfoUI entityUp;
+    [SerializeField] private GameResultUI gameResultUI;
     [SerializeField] private Unit invincibleUnit;
     [Space(10)]
     [SerializeField] private int maxBuild;
     [SerializeField] private int maxPeople;
+    public int curStageIndex;
 
     [System.NonSerialized] public List<EnemyUnit> curEnemyUnits = new();
     [System.NonSerialized] public List<Tower> curTowers = new();
@@ -33,22 +35,46 @@ public class GameManager : Singleton<GameManager>
         Gold = 0;
         People = 0;
         Build = 0;
-        SpeedUP(0);
         entityUp.action += BuildAndPeopleUpgrade;
+
+        if(curStageIndex == 2) Score = PlayerPrefs.GetInt("Score"); 
+        SpeedUP(0);
         StartCoroutine(GetGoldRoutine());
     }
 
     private IEnumerator GetGoldRoutine()
     {
-        while (!isGameOver && !isGameClear)
+        while (true)
         {
             Gold += 1;
             yield return new WaitForSeconds(1f);
         }
     }
 
-    public bool isGameOver { get; set; } = false;
-    public bool isGameClear { get; set; } = false;
+    public bool isGameOver
+    {
+        set
+        {
+            if(value == true)
+            {
+                WaveManager.Inst.enabled = false;
+                PlayerPrefs.SetInt("Score", Score);
+                gameResultUI.OnResult(false);
+            }
+        }
+    }
+    public bool isGameClear
+    {
+        set
+        {
+            if(value == true)
+            {
+                WaveManager.Inst.enabled = false;
+                PlayerPrefs.SetInt("Score", Score);
+                gameResultUI.OnResult(true);
+            }
+        }
+    }
 
     public int Score
     {
@@ -219,7 +245,8 @@ public class GameManager : Singleton<GameManager>
     public void SpawnUnit(UnitInfo info)
     {
         var pos = Player.Inst.finalHeadQuarters.GetRandSpawnPoint();
-        Instantiate(info.unitObj, pos, Quaternion.identity);
+        var unit = Instantiate(info.unitObj, pos, Quaternion.identity);
+        Player.Inst.curPlayerUnits.Add(unit);
     }
 
     public void SpawnInvincibleUnit()

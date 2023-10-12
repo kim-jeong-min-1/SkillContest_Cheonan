@@ -7,8 +7,10 @@ public class Player : Singleton<Player>
 {
     [Header("HeadQuater")]
     [SerializeField] private float nearPointRadius;
-    [SerializeField] private List<HeadQuarter> headQuarters;
+    public List<HeadQuarter> headQuarters;
     public HeadQuarter finalHeadQuarters;
+    public List<Unit> curPlayerUnits;
+    private int preUnitIndex = int.MaxValue;
 
     public Vector3 GetHeadQuarterPos()
     {
@@ -27,7 +29,7 @@ public class Player : Singleton<Player>
                 pos = finalHeadQuarters.transform.position + Random.insideUnitSphere * nearPointRadius;
             }
 
-            if(NavMesh.SamplePosition(pos, out hit, 10f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(pos, out hit, 10f, NavMesh.AllAreas))
             {
                 return hit.position;
             }
@@ -37,5 +39,27 @@ public class Player : Singleton<Player>
     public void ReMoveHeadQuarter(HeadQuarter head)
     {
         headQuarters.Remove(head);
+    }
+
+    public Vector3 GetUnitPos()
+    {
+        var rand = Random.Range(0, curPlayerUnits.Count);
+
+        if (rand == preUnitIndex && curPlayerUnits.Count == 1)
+        {
+            rand = preUnitIndex;
+        }
+        else
+        {
+            rand = Random.Range(0, curPlayerUnits.Count);
+        }
+
+        if (curPlayerUnits[rand] != null)
+        {
+            return curPlayerUnits[rand].GetCenterPos();
+        }
+
+        curPlayerUnits.RemoveAt(rand);
+        return curPlayerUnits[preUnitIndex].GetCenterPos();
     }
 }

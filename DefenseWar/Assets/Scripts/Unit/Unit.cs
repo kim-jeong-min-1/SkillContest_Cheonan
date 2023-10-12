@@ -105,6 +105,8 @@ public class Unit : Entity
         animator.SetTrigger("Die");
 
         var time = animator.GetCurrentAnimatorStateInfo(0).length;
+
+        if(isPlayable) GameManager.Inst.People--;
         Destroy(gameObject, time);
         enabled = false;
     }

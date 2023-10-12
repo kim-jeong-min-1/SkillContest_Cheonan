@@ -8,4 +8,18 @@ public class TitleManager : MonoBehaviour
     {
         SceneLoadManager.Inst.LoadScene("Loading");
     }
+
+    public void RankButton()
+    {
+        SceneLoadManager.Inst.LoadScene("Rank");
+    }
+
+    public void ExitButton()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
 }
